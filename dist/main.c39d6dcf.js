@@ -8542,74 +8542,7 @@ if (inBrowser) {
 
 var _default = Vue;
 exports.default = _default;
-},{}],"node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
-var bundleURL = null;
-
-function getBundleURLCached() {
-  if (!bundleURL) {
-    bundleURL = getBundleURL();
-  }
-
-  return bundleURL;
-}
-
-function getBundleURL() {
-  // Attempt to find the URL of the current script and use that as the base URL
-  try {
-    throw new Error();
-  } catch (err) {
-    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
-
-    if (matches) {
-      return getBaseURL(matches[0]);
-    }
-  }
-
-  return '/';
-}
-
-function getBaseURL(url) {
-  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
-}
-
-exports.getBundleURL = getBundleURLCached;
-exports.getBaseURL = getBaseURL;
-},{}],"node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
-var bundle = require('./bundle-url');
-
-function updateLink(link) {
-  var newLink = link.cloneNode();
-
-  newLink.onload = function () {
-    link.remove();
-  };
-
-  newLink.href = link.href.split('?')[0] + '?' + Date.now();
-  link.parentNode.insertBefore(newLink, link.nextSibling);
-}
-
-var cssTimeout = null;
-
-function reloadCSS() {
-  if (cssTimeout) {
-    return;
-  }
-
-  cssTimeout = setTimeout(function () {
-    var links = document.querySelectorAll('link[rel="stylesheet"]');
-
-    for (var i = 0; i < links.length; i++) {
-      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
-        updateLink(links[i]);
-      }
-    }
-
-    cssTimeout = null;
-  }, 50);
-}
-
-module.exports = reloadCSS;
-},{"./bundle-url":"node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"node_modules/vue-hot-reload-api/dist/index.js":[function(require,module,exports) {
+},{}],"node_modules/vue-hot-reload-api/dist/index.js":[function(require,module,exports) {
 var Vue // late bind
 var version
 var map = Object.create(null)
@@ -8902,6 +8835,21 @@ exports.default = {
   methods: {
     change: function change(amount) {
       this.isActive = amount;
+    },
+    execution: function execution(selected, specifiedString, sourceText) {
+      if (selected == '指定した文字列を含まない行を削除') {
+        if (specifiedString == '' || specifiedString.indexOf('\n') != -1) {
+          alert('指定の文字列に改行が含まれているため実行できません');
+        } //行で分割
+
+
+        var messages = sourceText.split('\n');
+        var filterMessage = messages.filter(function (message) {
+          return message.indexOf(specifiedString) != -1;
+        });
+        var result = filterMessage.join('\n');
+        alert(result);
+      }
     }
   }
 };
@@ -8952,10 +8900,6 @@ exports.default = {
           ? _c("li", [
               _c("div", [
                 _c("span", [_vm._v("指定の文字列:")]),
-                _vm._v(" "),
-                _c("p", { staticStyle: { "white-space": "pre-line" } }, [
-                  _vm._v(_vm._s(_vm.specifiedString))
-                ]),
                 _vm._v(" "),
                 _c("br"),
                 _vm._v(" "),
@@ -9013,21 +8957,33 @@ exports.default = {
                       _vm._v("Please select one")
                     ]),
                     _vm._v(" "),
-                    _c("option", [_vm._v("指定した文字列を含む行以外を削除")]),
+                    _c("option", [_vm._v("指定した文字列を含まない行を削除")]),
                     _vm._v(" "),
                     _c("option", [_vm._v("B")]),
                     _vm._v(" "),
                     _c("option", [_vm._v("C")])
                   ]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    on: {
+                      click: function($event) {
+                        return _vm.execution(
+                          _vm.selected,
+                          _vm.specifiedString,
+                          _vm.sourceText
+                        )
+                      }
+                    }
+                  },
+                  [_vm._v("実行")]
                 )
               ]),
               _vm._v(" "),
               _c("div", [
                 _c("span", [_vm._v("変換元テキスト:")]),
-                _vm._v(" "),
-                _c("p", { staticStyle: { "white-space": "pre-line" } }, [
-                  _vm._v(_vm._s(_vm.sourceText))
-                ]),
                 _vm._v(" "),
                 _c("br"),
                 _vm._v(" "),
@@ -9090,7 +9046,7 @@ render._withStripped = true
         
       }
     })();
-},{"_css_loader":"node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"main.ts":[function(require,module,exports) {
+},{"vue-hot-reload-api":"node_modules/vue-hot-reload-api/dist/index.js","vue":"node_modules/vue/dist/vue.runtime.esm.js"}],"main.ts":[function(require,module,exports) {
 "use strict";
 
 var __importDefault = this && this.__importDefault || function (mod) {
