@@ -8827,14 +8827,33 @@ exports.default = {
   data: function data() {
     return {
       isActive: 1,
+      isSignedTextAreaActive: 0,
       specifiedString: '',
       sourceText: '',
+      resultText: '',
       selected: ''
     };
   },
   methods: {
+    /*const  = {
+      IOS: 'iOS',
+      Android: 'Android'
+    } as const;
+    type MOBILE_OS = typeof MOBILE_OS[keyof typeof MOBILE_OS];*/
     change: function change(amount) {
       this.isActive = amount;
+    },
+    changeSelected: function changeSelected() {
+      if (this.selected == '指定した文字列を含まない行を削除') {
+        this.isSignedTextAreaActive = 1;
+      } else {
+        this.isSignedTextAreaActive = 0;
+      }
+    },
+    copy: function copy() {
+      navigator.clipboard.writeText(this.resultText).catch(function (e) {
+        console.error(e);
+      });
     },
     execution: function execution(selected, specifiedString, sourceText) {
       if (selected == '指定した文字列を含まない行を削除') {
@@ -8848,10 +8867,10 @@ exports.default = {
           return message.indexOf(specifiedString) != -1;
         });
         var result = filterMessage.join('\n');
-        alert(result);
+        this.resultText = result;
       } else if (selected == '半角スペースをタブ空白に変換') {
         var result = sourceText.replace(/ /g, '\t');
-        alert(result);
+        this.resultText = result;
       }
     }
   }
@@ -8902,90 +8921,103 @@ exports.default = {
         _vm.isActive === 1
           ? _c("li", [
               _c("div", [
-                _c("span", [_vm._v("指定の文字列:")]),
-                _vm._v(" "),
-                _c("br"),
-                _vm._v(" "),
-                _c("textarea", {
-                  directives: [
+                _c("div", [
+                  _c(
+                    "select",
                     {
-                      name: "model",
-                      rawName: "v-model",
-                      value: _vm.specifiedString,
-                      expression: "specifiedString"
-                    }
-                  ],
-                  staticClass: "small",
-                  attrs: { placeholder: "add multiple lines" },
-                  domProps: { value: _vm.specifiedString },
-                  on: {
-                    input: function($event) {
-                      if ($event.target.composing) {
-                        return
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.selected,
+                          expression: "selected"
+                        }
+                      ],
+                      on: {
+                        change: [
+                          function($event) {
+                            var $$selectedVal = Array.prototype.filter
+                              .call($event.target.options, function(o) {
+                                return o.selected
+                              })
+                              .map(function(o) {
+                                var val = "_value" in o ? o._value : o.value
+                                return val
+                              })
+                            _vm.selected = $event.target.multiple
+                              ? $$selectedVal
+                              : $$selectedVal[0]
+                          },
+                          _vm.changeSelected
+                        ]
                       }
-                      _vm.specifiedString = $event.target.value
-                    }
-                  }
-                }),
+                    },
+                    [
+                      _c("option", { attrs: { disabled: "", value: "" } }, [
+                        _vm._v("Please select one")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", [
+                        _vm._v("指定した文字列を含まない行を削除")
+                      ]),
+                      _vm._v(" "),
+                      _c("option", [_vm._v("半角スペースをタブ空白に変換")]),
+                      _vm._v(" "),
+                      _c("option", [_vm._v("C")])
+                    ]
+                  )
+                ]),
                 _vm._v(" "),
-                _c(
-                  "select",
-                  {
-                    directives: [
-                      {
-                        name: "model",
-                        rawName: "v-model",
-                        value: _vm.selected,
-                        expression: "selected"
-                      }
-                    ],
-                    on: {
-                      change: function($event) {
-                        var $$selectedVal = Array.prototype.filter
-                          .call($event.target.options, function(o) {
-                            return o.selected
-                          })
-                          .map(function(o) {
-                            var val = "_value" in o ? o._value : o.value
-                            return val
-                          })
-                        _vm.selected = $event.target.multiple
-                          ? $$selectedVal
-                          : $$selectedVal[0]
-                      }
-                    }
-                  },
-                  [
-                    _c("option", { attrs: { disabled: "", value: "" } }, [
-                      _vm._v("Please select one")
-                    ]),
-                    _vm._v(" "),
-                    _c("option", [_vm._v("指定した文字列を含まない行を削除")]),
-                    _vm._v(" "),
-                    _c("option", [_vm._v("半角スペースをタブ空白に変換")]),
-                    _vm._v(" "),
-                    _c("option", [_vm._v("C")])
-                  ]
-                ),
+                _vm.isSignedTextAreaActive === 1
+                  ? _c("div", [
+                      _c("span", [_vm._v("指定の文字列:")]),
+                      _vm._v(" "),
+                      _c("br"),
+                      _vm._v(" "),
+                      _c("textarea", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.specifiedString,
+                            expression: "specifiedString"
+                          }
+                        ],
+                        staticClass: "small",
+                        attrs: { placeholder: "add multiple lines" },
+                        domProps: { value: _vm.specifiedString },
+                        on: {
+                          input: function($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.specifiedString = $event.target.value
+                          }
+                        }
+                      })
+                    ])
+                  : _vm._e(),
                 _vm._v(" "),
-                _c(
-                  "button",
-                  {
-                    on: {
-                      click: function($event) {
-                        return _vm.execution(
-                          _vm.selected,
-                          _vm.specifiedString,
-                          _vm.sourceText
-                        )
+                _c("div", [
+                  _c(
+                    "button",
+                    {
+                      on: {
+                        click: function($event) {
+                          return _vm.execution(
+                            _vm.selected,
+                            _vm.specifiedString,
+                            _vm.sourceText
+                          )
+                        }
                       }
-                    }
-                  },
-                  [_vm._v("実行")]
-                )
+                    },
+                    [_vm._v("実行")]
+                  )
+                ])
               ]),
               _vm._v(" "),
-              _c("div", [
+              _c("div", { staticClass: "no-line-breaks half" }, [
                 _c("span", [_vm._v("変換元テキスト:")]),
                 _vm._v(" "),
                 _c("br"),
@@ -9011,6 +9043,40 @@ exports.default = {
                     }
                   }
                 })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "no-line-breaks align-height" }, [
+                _vm._v("\n        ➡\n        ")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "no-line-breaks half" }, [
+                _c("span", [_vm._v("変換後テキスト:")]),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.resultText,
+                      expression: "resultText"
+                    }
+                  ],
+                  staticClass: "big",
+                  attrs: { placeholder: "" },
+                  domProps: { value: _vm.resultText },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.resultText = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("button", { on: { click: _vm.copy } }, [_vm._v("copy")])
               ])
             ])
           : _vm.isActive === 2
