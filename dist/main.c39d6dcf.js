@@ -8850,6 +8850,11 @@ exports.default = {
         this.isSignedTextAreaActive = 0;
       }
     },
+    copy: function copy() {
+      navigator.clipboard.writeText(this.resultText).catch(function (e) {
+        console.error(e);
+      });
+    },
     execution: function execution(selected, specifiedString, sourceText) {
       if (selected == '指定した文字列を含まない行を削除') {
         if (specifiedString == '' || specifiedString.indexOf('\n') != -1) {
@@ -9069,7 +9074,9 @@ exports.default = {
                       _vm.resultText = $event.target.value
                     }
                   }
-                })
+                }),
+                _vm._v(" "),
+                _c("button", { on: { click: _vm.copy } }, [_vm._v("copy")])
               ])
             ])
           : _vm.isActive === 2

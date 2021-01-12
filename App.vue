@@ -44,6 +44,7 @@
             <span>変換後テキスト:</span>
             <br>
             <textarea class="big" v-model="resultText" placeholder=""></textarea>
+            <button @click="copy">copy</button>
           </div>
         </li>
         <li v-else-if="isActive === 2">コンテンツ2コンテンツ2コンテンツ2コンテンツ2</li>
@@ -76,6 +77,12 @@ export default {
       }else{
         this.isSignedTextAreaActive = 0;
       }
+    }
+
+    copy(): void{
+      navigator.clipboard.writeText(this.resultText).catch((e) => {
+        console.error(e)
+      })
     }
 
     execution(selected: string, specifiedString: string, sourceText: string): void {
