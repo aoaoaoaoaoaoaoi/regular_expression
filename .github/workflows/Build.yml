@@ -18,7 +18,7 @@ jobs:
     - name: npm install, build,
       run: |
         npm ci
-        npm run build --if-present
+        npm run build --if-present -- --public-url '/regular_expression/'
       env:
         CI: true
     - name: Deploy
