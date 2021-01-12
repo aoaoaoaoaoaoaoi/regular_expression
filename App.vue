@@ -17,7 +17,7 @@
             <select v-model="selected">
               <option disabled value="">Please select one</option>
               <option>指定した文字列を含まない行を削除</option>
-              <option>B</option>
+              <option>半角スペースをタブ空白に変換</option>
               <option>C</option>
             </select>
 
@@ -59,6 +59,9 @@ export default {
           return message.indexOf(specifiedString) != -1;
         });
         const result = filterMessage.join('\n');
+        alert(result);
+      }else if(selected == '半角スペースをタブ空白に変換'){
+        const result = sourceText.replace(/ /g, '\t');
         alert(result);
       }
     }

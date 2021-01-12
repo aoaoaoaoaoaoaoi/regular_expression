@@ -8849,6 +8849,9 @@ exports.default = {
         });
         var result = filterMessage.join('\n');
         alert(result);
+      } else if (selected == '半角スペースをタブ空白に変換') {
+        var result = sourceText.replace(/ /g, '\t');
+        alert(result);
       }
     }
   }
@@ -8959,7 +8962,7 @@ exports.default = {
                     _vm._v(" "),
                     _c("option", [_vm._v("指定した文字列を含まない行を削除")]),
                     _vm._v(" "),
-                    _c("option", [_vm._v("B")]),
+                    _c("option", [_vm._v("半角スペースをタブ空白に変換")]),
                     _vm._v(" "),
                     _c("option", [_vm._v("C")])
                   ]
@@ -9097,7 +9100,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56101" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "54259" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
