@@ -1,8 +1,15 @@
 textarea.big {
-    width: 90%;
+    width: 40%;
     height: 50%;
 
     font-size: 110%;
+}
+
+textarea.small {
+  width: 50%;
+  height: 25%;
+
+  font-size: 110%;
 }
 
 /* タブ */
@@ -41,7 +48,7 @@ ul{
     margin-top: -1px;
   }
   .contents li {
-    width: 80%;
+    width: 96%;
     padding: 20px;
     border: 1px solid #ccc;
   }

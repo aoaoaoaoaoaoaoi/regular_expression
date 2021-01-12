@@ -10,18 +10,24 @@
       <ul class="contents">
         <li v-if="isActive === 1">
           <div>
-            <span>指定の文字列:</span>
-            <br>
-            <textarea class="small" v-model="specifiedString" placeholder="add multiple lines"></textarea>
+            <div>
+              <select v-model="selected" v-on:change="changeSelected">
+                <option disabled value="">Please select one</option>
+                <option>指定した文字列を含まない行を削除</option>
+                <option>半角スペースをタブ空白に変換</option>
+                <option>C</option>
+              </select>
+            </div>
 
-            <select v-model="selected">
-              <option disabled value="">Please select one</option>
-              <option>指定した文字列を含まない行を削除</option>
-              <option>半角スペースをタブ空白に変換</option>
-              <option>C</option>
-            </select>
+            <div v-if="isSignedTextAreaActive === 1">
+              <span>指定の文字列:</span>
+              <br>
+              <textarea class="small" v-model="specifiedString" placeholder="add multiple lines"></textarea>
+            </div>
 
-            <button @click="execution(selected, specifiedString, sourceText)">実行</button>
+            <div>
+              <button @click="execution(selected, specifiedString, sourceText)">実行</button>
+            </div>
           </div>
 
           <div>
@@ -40,11 +46,26 @@
 <script lang="ts">
 export default {
   data () {
-    return { isActive: 1, specifiedString: '', sourceText: '', selected: '' };
+    return { isActive: 1, isSignedTextAreaActive: 0, specifiedString: '', sourceText: '', selected: '' };
   },
   methods: {
+
+  /*const  = {
+    IOS: 'iOS',
+    Android: 'Android'
+  } as const;
+  type MOBILE_OS = typeof MOBILE_OS[keyof typeof MOBILE_OS];*/
+
     change(amount: number): void {
       this.isActive = amount;
+    }
+
+    changeSelected(): void{
+      if(this.selected == '指定した文字列を含まない行を削除'){
+        this.isSignedTextAreaActive = 1;
+      }else{
+        this.isSignedTextAreaActive = 0;
+      }
     }
 
     execution(selected: string, specifiedString: string, sourceText: string): void {
