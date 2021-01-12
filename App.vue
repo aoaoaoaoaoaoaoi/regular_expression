@@ -30,10 +30,20 @@
             </div>
           </div>
 
-          <div>
+          <div class="no-line-breaks half">
             <span>変換元テキスト:</span>
             <br>
-            <textarea class="big"  v-model="sourceText" placeholder="add multiple lines"></textarea>
+            <textarea class="big" v-model="sourceText" placeholder="add multiple lines"></textarea>
+          </div>
+
+          <div class="no-line-breaks align-height">
+          ➡
+          </div>
+
+          <div class="no-line-breaks half">
+            <span>変換後テキスト:</span>
+            <br>
+            <textarea class="big" v-model="sourceText" placeholder="add multiple lines"></textarea>
           </div>
         </li>
         <li v-else-if="isActive === 2">コンテンツ2コンテンツ2コンテンツ2コンテンツ2</li>

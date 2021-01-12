@@ -9011,8 +9011,40 @@ exports.default = {
                 ])
               ]),
               _vm._v(" "),
-              _c("div", [
+              _c("div", { staticClass: "no-line-breaks half" }, [
                 _c("span", [_vm._v("変換元テキスト:")]),
+                _vm._v(" "),
+                _c("br"),
+                _vm._v(" "),
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.sourceText,
+                      expression: "sourceText"
+                    }
+                  ],
+                  staticClass: "big",
+                  attrs: { placeholder: "add multiple lines" },
+                  domProps: { value: _vm.sourceText },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.sourceText = $event.target.value
+                    }
+                  }
+                })
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "no-line-breaks align-height" }, [
+                _vm._v("\n        ➡\n        ")
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "no-line-breaks half" }, [
+                _c("span", [_vm._v("変換後テキスト:")]),
                 _vm._v(" "),
                 _c("br"),
                 _vm._v(" "),
