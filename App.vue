@@ -43,7 +43,7 @@
           <div class="no-line-breaks half">
             <span>変換後テキスト:</span>
             <br>
-            <textarea class="big" v-model="sourceText" placeholder="add multiple lines"></textarea>
+            <textarea class="big" v-model="resultText" placeholder=""></textarea>
           </div>
         </li>
         <li v-else-if="isActive === 2">コンテンツ2コンテンツ2コンテンツ2コンテンツ2</li>
@@ -56,7 +56,7 @@
 <script lang="ts">
 export default {
   data () {
-    return { isActive: 1, isSignedTextAreaActive: 0, specifiedString: '', sourceText: '', selected: '' };
+    return { isActive: 1, isSignedTextAreaActive: 0, specifiedString: '', sourceText: '', resultText: '', selected: '' };
   },
   methods: {
 
@@ -90,10 +90,10 @@ export default {
           return message.indexOf(specifiedString) != -1;
         });
         const result = filterMessage.join('\n');
-        alert(result);
+        this.resultText = result;
       }else if(selected == '半角スペースをタブ空白に変換'){
         const result = sourceText.replace(/ /g, '\t');
-        alert(result);
+        this.resultText = result;
       }
     }
 

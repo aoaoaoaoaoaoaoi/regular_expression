@@ -8830,6 +8830,7 @@ exports.default = {
       isSignedTextAreaActive: 0,
       specifiedString: '',
       sourceText: '',
+      resultText: '',
       selected: ''
     };
   },
@@ -8861,10 +8862,10 @@ exports.default = {
           return message.indexOf(specifiedString) != -1;
         });
         var result = filterMessage.join('\n');
-        alert(result);
+        this.resultText = result;
       } else if (selected == '半角スペースをタブ空白に変換') {
         var result = sourceText.replace(/ /g, '\t');
-        alert(result);
+        this.resultText = result;
       }
     }
   }
@@ -9053,19 +9054,19 @@ exports.default = {
                     {
                       name: "model",
                       rawName: "v-model",
-                      value: _vm.sourceText,
-                      expression: "sourceText"
+                      value: _vm.resultText,
+                      expression: "resultText"
                     }
                   ],
                   staticClass: "big",
-                  attrs: { placeholder: "add multiple lines" },
-                  domProps: { value: _vm.sourceText },
+                  attrs: { placeholder: "" },
+                  domProps: { value: _vm.resultText },
                   on: {
                     input: function($event) {
                       if ($event.target.composing) {
                         return
                       }
-                      _vm.sourceText = $event.target.value
+                      _vm.resultText = $event.target.value
                     }
                   }
                 })
