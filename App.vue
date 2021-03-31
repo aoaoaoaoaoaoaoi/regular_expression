@@ -15,6 +15,7 @@
                 <option disabled value="">Please select one</option>
                 <option>指定した文字列を含まない行を削除</option>
                 <option>半角スペースをタブ空白に変換</option>
+                <option>指定回数カンマが出てきた後、さらに次のカンマの手前に指定の文字列を挿入する、次のカンマがない場合は行の最後に文字列を挿入する</option>
                 <option>C</option>
               </select>
             </div>
@@ -55,24 +56,24 @@
 </template>
 
 <script lang="ts">
+  enum ConversionType {
+      DELETE = '指定した文字列を含まない行を削除',
+      SPACETOTAB = '半角スペースをタブ空白に変換',
+      INSERTCOMMA = '指定回数カンマが出てきた後、さらに次のカンマの手前に指定の文字列を挿入する、次のカンマがない場合は行の最後に文字列を挿入する',
+  }
+
 export default {
   data () {
     return { isActive: 1, isSignedTextAreaActive: 0, specifiedString: '', sourceText: '', resultText: '', selected: '' };
   },
   methods: {
 
-  /*const  = {
-    IOS: 'iOS',
-    Android: 'Android'
-  } as const;
-  type MOBILE_OS = typeof MOBILE_OS[keyof typeof MOBILE_OS];*/
-
     change(amount: number): void {
       this.isActive = amount;
     }
 
-    changeSelected(): void{
-      if(this.selected == '指定した文字列を含まない行を削除'){
+    changeSelected(): void {
+      if(this.selected == ConversionType.DELETE || this.selected == ConversionType.INSERTCOMMA){
         this.isSignedTextAreaActive = 1;
       }else{
         this.isSignedTextAreaActive = 0;
@@ -86,7 +87,7 @@ export default {
     }
 
     execution(selected: string, specifiedString: string, sourceText: string): void {
-      if(selected == '指定した文字列を含まない行を削除'){
+      if(selected == ConversionType.DELETE){
         if(specifiedString=='' || specifiedString.indexOf('\n') != -1){
           alert('指定の文字列に改行が含まれているため実行できません');
         }
@@ -98,9 +99,15 @@ export default {
         });
         const result = filterMessage.join('\n');
         this.resultText = result;
-      }else if(selected == '半角スペースをタブ空白に変換'){
+      }else if(selected == ConversionType.SPACETOTAB){
         const result = sourceText.replace(/ /g, '\t');
         this.resultText = result;
+      }else if(selected == ConversionType.INSERTCOMMA){
+        if(specifiedString==''){
+          alert('挿入する文字列を指定してください');
+        }
+        const messages = sourceText.split('\n');
+        //TODO：行ごとに指定のカンマ数の後に挿入
       }
     }
 

@@ -8823,6 +8823,14 @@ function patchScopedSlots (instance) {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+var ConversionType;
+
+(function (ConversionType) {
+  ConversionType["DELETE"] = "\u6307\u5B9A\u3057\u305F\u6587\u5B57\u5217\u3092\u542B\u307E\u306A\u3044\u884C\u3092\u524A\u9664";
+  ConversionType["SPACETOTAB"] = "\u534A\u89D2\u30B9\u30DA\u30FC\u30B9\u3092\u30BF\u30D6\u7A7A\u767D\u306B\u5909\u63DB";
+  ConversionType["INSERTCOMMA"] = "\u6307\u5B9A\u56DE\u6570\u30AB\u30F3\u30DE\u304C\u51FA\u3066\u304D\u305F\u5F8C\u3001\u3055\u3089\u306B\u6B21\u306E\u30AB\u30F3\u30DE\u306E\u624B\u524D\u306B\u6307\u5B9A\u306E\u6587\u5B57\u5217\u3092\u633F\u5165\u3059\u308B\u3001\u6B21\u306E\u30AB\u30F3\u30DE\u304C\u306A\u3044\u5834\u5408\u306F\u884C\u306E\u6700\u5F8C\u306B\u6587\u5B57\u5217\u3092\u633F\u5165\u3059\u308B";
+})(ConversionType || (ConversionType = {}));
+
 exports.default = {
   data: function data() {
     return {
@@ -8835,16 +8843,11 @@ exports.default = {
     };
   },
   methods: {
-    /*const  = {
-      IOS: 'iOS',
-      Android: 'Android'
-    } as const;
-    type MOBILE_OS = typeof MOBILE_OS[keyof typeof MOBILE_OS];*/
     change: function change(amount) {
       this.isActive = amount;
     },
     changeSelected: function changeSelected() {
-      if (this.selected == '指定した文字列を含まない行を削除') {
+      if (this.selected == ConversionType.DELETE || this.selected == ConversionType.INSERTCOMMA) {
         this.isSignedTextAreaActive = 1;
       } else {
         this.isSignedTextAreaActive = 0;
@@ -8856,7 +8859,7 @@ exports.default = {
       });
     },
     execution: function execution(selected, specifiedString, sourceText) {
-      if (selected == '指定した文字列を含まない行を削除') {
+      if (selected == ConversionType.DELETE) {
         if (specifiedString == '' || specifiedString.indexOf('\n') != -1) {
           alert('指定の文字列に改行が含まれているため実行できません');
         } //行で分割
@@ -8868,9 +8871,15 @@ exports.default = {
         });
         var result = filterMessage.join('\n');
         this.resultText = result;
-      } else if (selected == '半角スペースをタブ空白に変換') {
+      } else if (selected == ConversionType.SPACETOTAB) {
         var result = sourceText.replace(/ /g, '\t');
         this.resultText = result;
+      } else if (selected == ConversionType.INSERTCOMMA) {
+        if (specifiedString == '') {
+          alert('挿入する文字列を指定してください');
+        }
+
+        var messages = sourceText.split('\n'); //TODO：行ごとに指定のカンマ数の後に挿入
       }
     }
   }
@@ -8962,6 +8971,12 @@ exports.default = {
                       ]),
                       _vm._v(" "),
                       _c("option", [_vm._v("半角スペースをタブ空白に変換")]),
+                      _vm._v(" "),
+                      _c("option", [
+                        _vm._v(
+                          "指定回数カンマが出てきた後、さらに次のカンマの手前に指定の文字列を挿入する、次のカンマがない場合は行の最後に文字列を挿入する"
+                        )
+                      ]),
                       _vm._v(" "),
                       _c("option", [_vm._v("C")])
                     ]
@@ -9166,7 +9181,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "64742" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "53573" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
